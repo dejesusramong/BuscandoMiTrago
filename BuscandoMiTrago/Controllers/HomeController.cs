@@ -1,4 +1,6 @@
-﻿using BuscandoMiTrago.Models;
+﻿using AccesoADatos.Generico;
+using Entidades.Dominio;
+using BuscandoMiTrago.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -12,14 +14,18 @@ namespace BuscandoMiTrago.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        private readonly IRepositorioGenerico<Category> _repositorioGenerico;
+        private readonly IUnidadDeTrabajo _unidadDeTrabajo;
+        public HomeController(ILogger<HomeController> logger, IRepositorioGenerico<Category> repositorioGenerico, IUnidadDeTrabajo unidadDeTrabajo)
         {
             _logger = logger;
+            _repositorioGenerico = repositorioGenerico;
+            _unidadDeTrabajo = unidadDeTrabajo;
         }
 
         public IActionResult Index()
         {
+            
             return View();
         }
 

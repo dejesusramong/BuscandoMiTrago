@@ -1,0 +1,33 @@
+﻿@model IEnumerable<Entidades.Dominio.Alcoholic>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Alcoholic</h1>
+
+<p class="collapse">
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>No</th>
+            <th>Alcoholic</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{int rowNo = 1;}
+@foreach (var item in Model) {
+        <tr>
+            <td>@(rowNo++)</td>
+            <td>@(item.StrAlcoholic)</td>
+            <td>
+                <a class="btn btn-outline-dark" asp-controller="Drinks" asp-action="Index" asp-route-M="A" asp-route-A="@(item.StrAlcoholic)"><span class="fas fa-champagne-glasses mr-2"></span>Show Drinks...</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

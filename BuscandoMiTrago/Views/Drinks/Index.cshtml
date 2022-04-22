@@ -1,0 +1,131 @@
+﻿@model DrinksViewModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1 class="@(Model.M.ToLower().Equals("c") ? "" : "collapse")">Drinks by Category: <small>@(" " + Model.C)</small></h1>
+<h1 class="@(Model.M.ToLower().Equals("g") ? "" : "collapse")">Drinks by Glass: <small>@(" " + Model.G)</small></h1>
+<h1 class="@(Model.M.ToLower().Equals("i") ? "" : "collapse")">Drinks by Ingredient: <small>@(" " + Model.I)</small></h1>
+<h1 class="@(Model.M.ToLower().Equals("a") ? "" : "collapse")">Drinks by Alcoholic: <small>@(" " + Model.A)</small></h1>
+<p>
+  <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="false" aria-controls="multiCollapseExample1"><span class="fas fa-filter"></span></a>
+</p>
+<div class="row mb-2">
+  <div class="col">
+    <div class="collapse multi-collapse" id="multiCollapseExample1">
+      <div class="card card-body">
+          <form asp-action="Index" method="get">
+              <input type="hidden" asp-for="M" />
+              <div class="row">
+                        @if (Model.M.ToLower().Equals("c"))
+                        {
+                            <div class="col-md-3 @(Model.M.ToLower().Equals("c") ? "": "collapse")">
+                                <label class="m-1">Category:</label>
+                                <select class="form-control" asp-for="C" asp-items="ViewBag.Category">
+                                </select>
+                            </div>
+                        }
+                        else
+                        {
+              <input type="hidden" asp-for="C" />
+                        }
+                        @if (Model.M.ToLower().Equals("g"))
+                        {
+                        <div class="col-md-3 @(Model.M.ToLower().Equals("g") ? "": "collapse")">
+                    <label class="m-1">Glass:</label>
+                    <select class="form-control" asp-for="G" asp-items="ViewBag.Glass">
+                    </select>
+                </div>
+                        }
+                        else
+                        {
+              <input type="hidden" asp-for="G" />
+                        }
+                        @if (Model.M.ToLower().Equals("i"))
+                        {
+                <div class="col-md-3 @(Model.M.ToLower().Equals("i") ? "": "collapse")">
+                    <label class="m-1">Ingredient:</label>
+                    <select class="form-control" asp-for="I" asp-items="ViewBag.Ingredient">
+                    </select>
+                </div>
+                        }
+                        else
+                        {
+              <input type="hidden" asp-for="I" />
+                        }
+                        @if (Model.M.ToLower().Equals("a"))
+                        {
+                <div class="col-md-3 @(Model.M.ToLower().Equals("a") ? "": "collapse")">
+                    <label class="m-1">Alcoholic:</label>
+                    <select class="form-control" asp-for="A" asp-items="ViewBag.Alcoholic">
+                    </select>
+                </div>
+                        }
+                        else
+                        {
+              <input type="hidden" asp-for="A" />
+                        }
+                <div class="col-md-3">
+                    <button class="btn btn-secondary"><span class="fas fa-filter mr-2"></span>Consultar</button>
+                </div>
+              </div>
+          </form>
+      </div>
+    </div>
+  </div>
+</div>
+<p class="collapse">
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table table-striped">
+    <thead class="thead-dark">
+        <tr>
+            <th>No</th>
+            <th>Drink</th>
+            <th>Image</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @{int rowNo = 1;}
+@foreach (var item in Model.Drinks) {
+        <tr>
+            <td>@(rowNo++)</td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StrDrink)
+            </td>
+            <td>
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="@("#exampleModal"+item.IdDrink.ToString())">
+                  See Photo
+                </button>
+                <!-- Modal -->
+                <div class="modal fade" id="@("exampleModal"+item.IdDrink)" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">@(item.StrDrink)</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        <img src="@(item.StrDrinkThumb)" class="img-fluid" />
+                        </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary collapse">Save changes</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </td>
+            <td>
+                <a class="btn btn-info" asp-action="Details" asp-route-id="@item.IdDrink"><span class="fas fa-info mr-2"></span>Details</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

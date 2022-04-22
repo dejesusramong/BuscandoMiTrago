@@ -6,6 +6,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Entidades.DataContext;
+using Entidades.DataContext.Data;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace BuscandoMiTrago
 {
@@ -13,7 +16,17 @@ namespace BuscandoMiTrago
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            var host = CreateHostBuilder(args).Build();
+
+            using (var scope = host.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+                var context = services.GetRequiredService<BuscandoMiTragoDbContext>();
+
+                DbInicializador.Initialize(services);
+            }
+
+            host.Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

@@ -1,13 +1,19 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using BuscandoMiTrago.Extensiones;
+using BuscandoMiTrago.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
+using Entidades.DataContext;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 namespace BuscandoMiTrago
 {
     public class Startup
@@ -22,6 +28,10 @@ namespace BuscandoMiTrago
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<BuscandoMiTragoDbContext>(options => options.UseInMemoryDatabase(databaseName: "Patterns_DB"));
+            //services.AddControllers();
+            services.AddDependency();// o tambien usar IoC.AddDependency(services);//extension
+            //services.AddDbContext<TheCocktailDBContext>(options => options.UseTheCocktailDB(Configuration["Data:TheCocktailDB:ConnectionString"]));
             services.AddControllersWithViews();
         }
 
