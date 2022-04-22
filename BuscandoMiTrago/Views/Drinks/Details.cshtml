@@ -1,4 +1,4 @@
-﻿@model Entidades.Dominio.Drink
+﻿@model DrinksViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -12,44 +12,93 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StrDrink)
+            ID
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StrDrink)
+            @Html.DisplayFor(model => model.IdDrinkNavigation.IdDrink)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.StrDescription)
+            Drink
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StrDescription)
+            @Html.DisplayFor(model => model.IdDrinkNavigation.StrDrink)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Category)
+            Description
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Category.StrCategory)
+            @Html.DisplayFor(model => model.IdDrinkNavigation.StrDescription)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Glass)
+            Photo
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Glass.StrGlass)
+            <img src="@(Model.IdDrinkNavigation.StrDrinkThumb)"/>
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Ingredient)
+            Category
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Ingredient.StrIngredient1)
+            @Html.DisplayFor(model => model.IdDrinkNavigation.StrCategory)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Alcoholic)
+            Glass
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Alcoholic.StrAlcoholic)
+            @Html.DisplayFor(model => model.IdDrinkNavigation.StrGlass)
+        </dd>
+        <dt class = "col-sm-2">
+            Ingredient 1
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IdDrinkNavigation.StrIngredient1)
+        </dd>
+        <dt class = "col-sm-2">
+            Ingredient 2
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IdDrinkNavigation.StrIngredient2)
+        </dd>
+        <dt class = "col-sm-2">
+            Ingredient 3
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IdDrinkNavigation.StrIngredient3)
+        </dd>
+        <dt class = "col-sm-2">
+            Ingredient 4
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IdDrinkNavigation.StrIngredient4)
+        </dd>
+        <dt class = "col-sm-2">
+            Ingredient 5
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IdDrinkNavigation.StrIngredient5)
+        </dd>
+        <dt class = "col-sm-2">
+            Alcoholic
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IdDrinkNavigation.StrAlcoholic)
+        </dd>
+        <dt class = "col-sm-2">
+            Instructions
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.IdDrinkNavigation.StrInstructions)
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model.IdDrink">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index" 
+                asp-route-M="@Model.M"
+                asp-route-C="@Model.C"
+                asp-route-G="@Model.G"
+                asp-route-I="@Model.I"
+                asp-route-A="@Model.A"
+                asp-route-S="@Model.S"
+                asp-route-F="@Model.F"
+                >Back to List</a>
 </div>

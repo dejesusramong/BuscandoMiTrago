@@ -101,13 +101,12 @@ namespace Entidades.DataContext.Data
             using (var _context = new BuscandoMiTragoDbContext(serviceProvider.GetRequiredService<DbContextOptions<BuscandoMiTragoDbContext>>()))
             {
                 var dr = await cliente.GetFromJsonAsync<ApiMethods>("filter.php?c=" + strCategory);
-                
                 if (dr.Drinks.ValueKind == System.Text.Json.JsonValueKind.Array)
                 {
                     result = JsonConvert.DeserializeObject<List<Drink>>(dr.Drinks.ToString());
-
                     List<Drink> l = _context.Drink.ToList();
                     _context.Drink.RemoveRange(l);
+                    await _context.SaveChangesAsync();
                     foreach (var d in result)
                     {
                         if (!_context.Drink.Any(a=>a.IdDrink == d.IdDrink))
@@ -125,13 +124,12 @@ namespace Entidades.DataContext.Data
             using (var _context = new BuscandoMiTragoDbContext(serviceProvider.GetRequiredService<DbContextOptions<BuscandoMiTragoDbContext>>()))
             {
                 var dr = await cliente.GetFromJsonAsync<ApiMethods>("filter.php?g=" + strGlass);
-
                 if (dr.Drinks.ValueKind == System.Text.Json.JsonValueKind.Array)
                 {
                     result = JsonConvert.DeserializeObject<List<Drink>>(dr.Drinks.ToString());
-
                     List<Drink> l = _context.Drink.ToList();
                     _context.Drink.RemoveRange(l);
+                    await _context.SaveChangesAsync();
                     foreach (var d in result)
                     {
                         if (!_context.Drink.Any(a => a.IdDrink == d.IdDrink))
@@ -149,13 +147,12 @@ namespace Entidades.DataContext.Data
             using (var _context = new BuscandoMiTragoDbContext(serviceProvider.GetRequiredService<DbContextOptions<BuscandoMiTragoDbContext>>()))
             {
                 var dr = await cliente.GetFromJsonAsync<ApiMethods>("filter.php?i=" + strIngredient);
-
                 if (dr.Drinks.ValueKind == System.Text.Json.JsonValueKind.Array)
                 {
                     result = JsonConvert.DeserializeObject<List<Drink>>(dr.Drinks.ToString());
-
                     List<Drink> l = _context.Drink.ToList();
                     _context.Drink.RemoveRange(l);
+                    await _context.SaveChangesAsync();
                     foreach (var d in result)
                     {
                         if (!_context.Drink.Any(a => a.IdDrink == d.IdDrink))
@@ -173,6 +170,52 @@ namespace Entidades.DataContext.Data
             using (var _context = new BuscandoMiTragoDbContext(serviceProvider.GetRequiredService<DbContextOptions<BuscandoMiTragoDbContext>>()))
             {
                 var dr = await cliente.GetFromJsonAsync<ApiMethods>("filter.php?a=" + strAlcoholic);
+                if (dr.Drinks.ValueKind == System.Text.Json.JsonValueKind.Array)
+                {
+                    result = JsonConvert.DeserializeObject<List<Drink>>(dr.Drinks.ToString());
+                    List<Drink> l = _context.Drink.ToList();
+                    _context.Drink.RemoveRange(l);
+                    await _context.SaveChangesAsync();
+                    foreach (var d in result)
+                    {
+                        if (!_context.Drink.Any(a => a.IdDrink == d.IdDrink))
+                        {
+                            _context.Drink.Add(d);
+                        }
+                    }
+                    await _context.SaveChangesAsync();
+                }
+            }
+        }
+        public static async Task GetDrinksByNameAsync(IServiceProvider serviceProvider, string strName)
+        {
+            List<Drink> result = new List<Drink>();
+            using (var _context = new BuscandoMiTragoDbContext(serviceProvider.GetRequiredService<DbContextOptions<BuscandoMiTragoDbContext>>()))
+            {
+                var dr = await cliente.GetFromJsonAsync<ApiMethods>("search.php?s=" + strName);
+                if (dr.Drinks.ValueKind == System.Text.Json.JsonValueKind.Array)
+                {
+                    result = JsonConvert.DeserializeObject<List<Drink>>(dr.Drinks.ToString());
+                    List<Drink> l = _context.Drink.ToList();
+                    _context.Drink.RemoveRange(l);
+                    await _context.SaveChangesAsync();
+                    foreach (var d in result)
+                    {
+                        if (!_context.Drink.Any(a => a.IdDrink == d.IdDrink))
+                        {
+                            _context.Drink.Add(d);
+                        }
+                    }
+                    await _context.SaveChangesAsync();
+                }
+            }
+        }
+        public static async Task GetDrinksByFirstLetterAsync(IServiceProvider serviceProvider, string strFirstLetter)
+        {
+            List<Drink> result = new List<Drink>();
+            using (var _context = new BuscandoMiTragoDbContext(serviceProvider.GetRequiredService<DbContextOptions<BuscandoMiTragoDbContext>>()))
+            {
+                var dr = await cliente.GetFromJsonAsync<ApiMethods>("search.php?f=" + strFirstLetter);
 
                 if (dr.Drinks.ValueKind == System.Text.Json.JsonValueKind.Array)
                 {
@@ -180,11 +223,59 @@ namespace Entidades.DataContext.Data
 
                     List<Drink> l = _context.Drink.ToList();
                     _context.Drink.RemoveRange(l);
+                    await _context.SaveChangesAsync();
                     foreach (var d in result)
                     {
                         if (!_context.Drink.Any(a => a.IdDrink == d.IdDrink))
                         {
                             _context.Drink.Add(d);
+                        }
+                    }
+                    await _context.SaveChangesAsync();
+                }
+            }
+        }
+        public static async Task GetDrinkDetailsAsync(IServiceProvider serviceProvider, int id)
+        {
+            List<Drink> result = new List<Drink>();
+            using (var _context = new BuscandoMiTragoDbContext(serviceProvider.GetRequiredService<DbContextOptions<BuscandoMiTragoDbContext>>()))
+            {
+                var dr = await cliente.GetFromJsonAsync<ApiMethods>("lookup.php?i=" + id.ToString());
+
+                if (dr.Drinks.ValueKind == System.Text.Json.JsonValueKind.Array)
+                {
+                    result = JsonConvert.DeserializeObject<List<Drink>>(dr.Drinks.ToString());
+
+                    List<Drink> l = _context.Drink.Where(a=>a.IdDrink == id).ToList();
+                    _context.Drink.RemoveRange(l);
+                    await _context.SaveChangesAsync();
+                    foreach (var d in result)
+                    {
+                        if (!_context.Drink.Any(a => a.IdDrink == d.IdDrink))
+                        {
+                            _context.Drink.Add(d);
+                        }
+                    }
+                    await _context.SaveChangesAsync();
+                }
+            }
+        }
+        public static async Task GetIngredientsByNameAsync(IServiceProvider serviceProvider, string strIngredientName)
+        {
+            List<Ingredient> result = new List<Ingredient>();
+            using (var _context = new BuscandoMiTragoDbContext(serviceProvider.GetRequiredService<DbContextOptions<BuscandoMiTragoDbContext>>()))
+            {
+                List<Ingredient> l = _context.Ingredient.ToList();
+                _context.Ingredient.RemoveRange(l);
+                var dr = await cliente.GetFromJsonAsync<ApiMethods>("search.php?i=" + strIngredientName);
+                if (dr.Ingredients.ValueKind == System.Text.Json.JsonValueKind.Array)
+                {
+                    result = JsonConvert.DeserializeObject<List<Ingredient>>(dr.Ingredients.ToString());
+                    foreach (var d in result)
+                    {
+                        if (!_context.Ingredient.Any(a => a.IdIngredient == d.IdIngredient))
+                        {
+                            _context.Ingredient.Add(d);
                         }
                     }
                     await _context.SaveChangesAsync();

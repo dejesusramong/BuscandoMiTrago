@@ -27,7 +27,16 @@
                         </li>
                     </ul>
                     <div class="dropdown">
-  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+  <button class="btn btn-secondary dropdown-toggle mr-2" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Search
+  </button>
+  <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+    <a class="dropdown-item" asp-controller="Drinks" asp-action="Index" asp-route-M="S" asp-route-S="margarita">By Name</a>
+    <a class="dropdown-item" asp-controller="Drinks" asp-action="Index" asp-route-M="F" asp-route-F="a">By First Letter</a>
+  </div>
+</div>
+                    <div class="dropdown">
+  <button class="btn btn-secondary dropdown-toggle mr-2" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
     Filters
   </button>
   <div class="dropdown-menu" aria-labelledby="dropdownMenu2">

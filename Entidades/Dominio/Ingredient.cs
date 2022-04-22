@@ -11,6 +11,7 @@ namespace Entidades.Dominio
         {
             Drink = new HashSet<Drink>();
         }
+        public int IdIngredient { get; set; }
         public string StrIngredient1 { get; set; }
         public ICollection<Drink> Drink { get; set; }
     }

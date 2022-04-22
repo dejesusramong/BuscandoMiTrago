@@ -33,7 +33,7 @@ namespace Entidades.DataContext
                 entity.Property(a => a.StrDescription);
                 entity.Property(a => a.StrCategory);
                 entity.Property(a => a.StrGlass);
-                entity.Property(a => a.StrIngredient);
+                entity.Property(a => a.StrIngredient1);
                 entity.Property(a => a.StrAlcoholic);
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.Drink)
@@ -41,9 +41,9 @@ namespace Entidades.DataContext
                 entity.HasOne(d => d.Glass)
                     .WithMany(p => p.Drink)
                     .HasForeignKey(d => d.StrGlass);
-                entity.HasOne(d => d.Ingredient)
+                entity.HasOne(d => d.Ingredient1)
                     .WithMany(p => p.Drink)
-                    .HasForeignKey(d => d.StrIngredient);
+                    .HasForeignKey(d => d.StrIngredient1);
                 entity.HasOne(d => d.Alcoholic)
                     .WithMany(p => p.Drink)
                     .HasForeignKey(d => d.StrAlcoholic);
@@ -62,6 +62,7 @@ namespace Entidades.DataContext
             {
                 entity.HasKey(a => a.StrIngredient1);
                 entity.Property(a => a.StrIngredient1);
+                entity.Property(a => a.IdIngredient);
             });
             modelBuilder.Entity<Alcoholic>(entity =>
             {

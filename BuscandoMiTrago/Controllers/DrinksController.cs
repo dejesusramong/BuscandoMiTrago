@@ -36,25 +36,15 @@ namespace BuscandoMiTrago.Controllers
         }
 
         // GET: Drinks/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(DrinksViewModel model)
         {
-            if (id == null)
+            if (model.IdDrink == null)
             {
                 return NotFound();
             }
+            await model.GetDrink(_context, _serviceProvider);
 
-            var drink = await _context.Drink
-                .Include(d => d.Alcoholic)
-                .Include(d => d.Category)
-                .Include(d => d.Glass)
-                .Include(d => d.Ingredient)
-                .FirstOrDefaultAsync(m => m.IdDrink == id);
-            if (drink == null)
-            {
-                return NotFound();
-            }
-
-            return View(drink);
+            return View(model);
         }
 
         // GET: Drinks/Create
@@ -83,7 +73,7 @@ namespace BuscandoMiTrago.Controllers
             ViewData["StrAlcoholic"] = new SelectList(_context.Alcoholic, "StrAlcoholic", "StrAlcoholic", drink.StrAlcoholic);
             ViewData["StrCategory"] = new SelectList(_context.Category, "StrCategory", "StrCategory", drink.StrCategory);
             ViewData["StrGlass"] = new SelectList(_context.Glass, "StrGlass", "StrGlass", drink.StrGlass);
-            ViewData["StrIngredient"] = new SelectList(_context.Ingredient, "StrIngredient1", "StrIngredient1", drink.StrIngredient);
+            ViewData["StrIngredient"] = new SelectList(_context.Ingredient, "StrIngredient1", "StrIngredient1", drink.StrIngredient1);
             return View(drink);
         }
 
@@ -103,7 +93,7 @@ namespace BuscandoMiTrago.Controllers
             ViewData["StrAlcoholic"] = new SelectList(_context.Alcoholic, "StrAlcoholic", "StrAlcoholic", drink.StrAlcoholic);
             ViewData["StrCategory"] = new SelectList(_context.Category, "StrCategory", "StrCategory", drink.StrCategory);
             ViewData["StrGlass"] = new SelectList(_context.Glass, "StrGlass", "StrGlass", drink.StrGlass);
-            ViewData["StrIngredient"] = new SelectList(_context.Ingredient, "StrIngredient1", "StrIngredient1", drink.StrIngredient);
+            ViewData["StrIngredient"] = new SelectList(_context.Ingredient, "StrIngredient1", "StrIngredient1", drink.StrIngredient1);
             return View(drink);
         }
 
@@ -142,7 +132,7 @@ namespace BuscandoMiTrago.Controllers
             ViewData["StrAlcoholic"] = new SelectList(_context.Alcoholic, "StrAlcoholic", "StrAlcoholic", drink.StrAlcoholic);
             ViewData["StrCategory"] = new SelectList(_context.Category, "StrCategory", "StrCategory", drink.StrCategory);
             ViewData["StrGlass"] = new SelectList(_context.Glass, "StrGlass", "StrGlass", drink.StrGlass);
-            ViewData["StrIngredient"] = new SelectList(_context.Ingredient, "StrIngredient1", "StrIngredient1", drink.StrIngredient);
+            ViewData["StrIngredient"] = new SelectList(_context.Ingredient, "StrIngredient1", "StrIngredient1", drink.StrIngredient1);
             return View(drink);
         }
 
@@ -158,7 +148,7 @@ namespace BuscandoMiTrago.Controllers
                 .Include(d => d.Alcoholic)
                 .Include(d => d.Category)
                 .Include(d => d.Glass)
-                .Include(d => d.Ingredient)
+                .Include(d => d.Ingredient1)
                 .FirstOrDefaultAsync(m => m.IdDrink == id);
             if (drink == null)
             {

@@ -9,6 +9,8 @@
 <h1 class="@(Model.M.ToLower().Equals("g") ? "" : "collapse")">Drinks by Glass: <small>@(" " + Model.G)</small></h1>
 <h1 class="@(Model.M.ToLower().Equals("i") ? "" : "collapse")">Drinks by Ingredient: <small>@(" " + Model.I)</small></h1>
 <h1 class="@(Model.M.ToLower().Equals("a") ? "" : "collapse")">Drinks by Alcoholic: <small>@(" " + Model.A)</small></h1>
+<h1 class="@(Model.M.ToLower().Equals("s") ? "" : "collapse")">Drinks by Name: <small>@(" " + Model.S)</small></h1>
+<h1 class="@(Model.M.ToLower().Equals("f") ? "" : "collapse")">Drinks by First Letter: <small>@(" " + Model.F)</small></h1>
 <p>
   <a class="btn btn-primary" data-toggle="collapse" href="#multiCollapseExample1" role="button" aria-expanded="false" aria-controls="multiCollapseExample1"><span class="fas fa-filter"></span></a>
 </p>
@@ -67,8 +69,30 @@
                         {
               <input type="hidden" asp-for="A" />
                         }
+                        @if (Model.M.ToLower().Equals("s"))
+                        {
+                <div class="col-md-3 @(Model.M.ToLower().Equals("s") ? "": "collapse")">
+                    <label class="m-1">By Name:</label>
+                    <input type="text" asp-for="S" maxlength=20 required>
+                </div>
+                        }
+                        else
+                        {
+              <input type="hidden" asp-for="S" />
+                        }
+                        @if (Model.M.ToLower().Equals("f"))
+                        {
+                <div class="col-md-3 @(Model.M.ToLower().Equals("f") ? "": "collapse")">
+                    <label class="m-1">By First Letter:</label>
+                    <input type="text" asp-for="F" maxlength="1" required>
+                </div>
+                        }
+                        else
+                        {
+              <input type="hidden" asp-for="F" />
+                        }
                 <div class="col-md-3">
-                    <button class="btn btn-secondary"><span class="fas fa-filter mr-2"></span>Consultar</button>
+                    <button class="btn btn-secondary"><span class="fas fa-filter mr-2"></span>Filter/Search</button>
                 </div>
               </div>
           </form>
@@ -123,7 +147,15 @@
                 </div>
             </td>
             <td>
-                <a class="btn btn-info" asp-action="Details" asp-route-id="@item.IdDrink"><span class="fas fa-info mr-2"></span>Details</a>
+                <a class="btn btn-info" asp-action="Details" 
+                asp-route-M="@Model.M"
+                asp-route-C="@Model.C"
+                asp-route-G="@Model.G"
+                asp-route-I="@Model.I"
+                asp-route-A="@Model.A"
+                asp-route-S="@Model.S"
+                asp-route-F="@Model.F"
+                asp-route-IdDrink="@item.IdDrink"><span class="fas fa-info mr-2"></span>Details</a>
             </td>
         </tr>
 }

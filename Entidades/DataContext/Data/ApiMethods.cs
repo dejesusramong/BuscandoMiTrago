@@ -1,4 +1,5 @@
 ﻿using Entidades.Dominio;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,5 +12,6 @@ namespace Entidades.DataContext.Data
     public class ApiMethods
     {
         public JsonElement Drinks { get; set; }
+        public JsonElement Ingredients { get; set; }
     }
 }
