@@ -4,7 +4,33 @@
     ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
+<div class="card mb-2">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-8">
+                <h5 id="hUser"></h5>
+            </div>
+            <div class="col-4">
+                <button id="btnChange" onclick="Change()" class="btn btn-sm btn-outline-primary" title="It's not your name. Change it!">Other User</button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-8">
+                <div id="dIsFav" class="collapse">
+                    <span class="text-warning fas fa-star mr-2"></span>Great! It's one of your favorite drinks!
+                </div>
+            </div>
+            <div class="col-4">
+                <button id="btnFav" onclick="Fav()" class="btn btn-sm btn-outline-success"><span class="fas fa-star mr-2"></span>It's my favorite!</button>
+                <button id="btnUnFav" onclick="UnFav()" class="btn btn-sm btn-outline-danger collapse"><span class="fas fa-thumbs-down mr-2"></span>Not Favorite</button>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer collapse">
+    </div>
+</div>
 <h1>Details</h1>
 
 <div>
@@ -15,7 +41,15 @@
             ID
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.IdDrinkNavigation.IdDrink)
+            <div class="row">
+                <div class="col-6">
+                    @Html.DisplayFor(model => model.IdDrinkNavigation.IdDrink)
+                </div>
+                <div class="col-3">
+                </div>
+                <div class="col-3">
+                </div>
+            </div>
         </dd>
         <dt class = "col-sm-2">
             Drink
@@ -102,3 +136,156 @@
                 asp-route-F="@Model.F"
                 >Back to List</a>
 </div>
+@section Scripts 
+{
+    <script>
+        var currUser;
+        var currId;
+        var dIsFav;
+        var btnFav;
+        var btnUnFav;
+        var hUser;
+        window.onload = function()
+        {
+            if(localStorage.user == undefined)
+            {
+                currUser = "Gerardo";
+                localStorage.user = "Gerardo";
+            }
+            else
+            {
+                currUser = localStorage.user;
+            }
+            currId = @(Model.IdDrink);
+            dIsFav = document.getElementById("dIsFav");
+            btnFav = document.getElementById("btnFav");
+            btnUnFav = document.getElementById("btnUnFav");
+            hUser = document.getElementById("hUser");
+
+            init();
+
+            //localStorage.clear();
+        }
+        function init()
+        {
+            let existsCurrentUser = SearchUser(currUser);
+            if (!existsCurrentUser)
+            {
+                var userFavs = 
+                [{
+                    name: "Gerardo",
+                    id: [12560,12728]
+                },
+                {
+                    name: "Juan",
+                    id: [12560]
+                }];
+                localStorage.users = JSON.stringify(userFavs);
+            }
+            else
+            {
+            }
+            SetFavs();
+        }
+        function SetFavs()
+        {
+            hUser.innerText = currUser;
+            dIsFav.classList.add("collapse");
+            btnUnFav.classList.add("collapse");
+            btnFav.classList.remove("collapse");
+            let users = JSON.parse(localStorage.users);
+            for(let u = 0; u < users.length; u++)
+            {
+                if(users[u].name == currUser)
+                {
+                    for(let i = 0; i < users[u].id.length; i++)
+                    {
+                        if(users[u].id[i] == currId)
+                        {
+                            dIsFav.classList.remove("collapse");
+                            btnUnFav.classList.remove("collapse");
+                            btnFav.classList.add("collapse");
+                        }
+                    }
+                }
+            }
+        }
+        function SearchUser(name)
+        {
+            let existsUser = false;
+            if(localStorage.users == undefined)
+            {
+                return false;
+            }
+            let users = JSON.parse(localStorage.users);
+            for(let u = 0; u < users.length;u++)
+            {
+                if (users[u].name == name)
+                {
+                    existsUser = true;
+                    break;
+                }
+            }
+            return existsUser;
+        }
+        function Change()
+        {
+            var user = prompt("Enter your name, please:", "Gerardo");
+            if (user != null && user != currUser) {
+                currUser = user;
+                localStorage.removeItem("user");
+                localStorage.user = currUser;
+                SetFavs();
+            }
+        }
+        function Fav()
+        {
+             let users = JSON.parse(localStorage.users);
+             let exists = SearchUser(currUser);
+             if(!exists)
+             {
+                 var userFavs = 
+                {
+                    name: currUser,
+                    id: [currId]
+                };
+                users.push(userFavs);
+                localStorage.removeItem("users");
+                localStorage.users = JSON.stringify(users);
+            }
+            else
+            {
+                for(let u = 0; u < users.length; u++)
+                {
+                    if(users[u].name == currUser)
+                    {
+                        users[u].id.push(currId);
+                        break;
+                    }
+                }
+                localStorage.removeItem("users");
+                localStorage.users = JSON.stringify(users);
+            }
+            SetFavs();
+       }
+        function UnFav(id)
+        {
+             let users = JSON.parse(localStorage.users);
+             let exists = SearchUser(currUser);
+             if(exists)
+             {
+                for(let u = 0; u < users.length; u++)
+                {
+                    if(users[u].name == currUser)
+                    {
+                        users[u].id.splice (users[u].id.indexOf(currId), 1);
+                        break;
+                    }
+                }
+                localStorage.removeItem("users");
+                localStorage.users = JSON.stringify(users);
+            }
+            SetFavs();
+        }
+    </script>
+}

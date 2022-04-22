@@ -11,17 +11,11 @@ using System.Threading.Tasks;
 
 namespace BuscandoMiTrago.Models
 {
-    public class DrinksViewModel
+    public class DrinksViewModel : BaseVieModel
     {
+        public UsersFavorites UF { get; set; }
         public int? IdDrink { get; set; }
         public Drink IdDrinkNavigation { get; set; }
-        public string M { get; set; }
-        public string C { get; set; }
-        public string G { get; set; }
-        public string I { get; set; }
-        public string A { get; set; }
-        public string S { get; set; }
-        public string F { get; set; }
         public List<Drink> Drinks { get; set; }
 
         internal async Task GetDrinks(BuscandoMiTragoDbContext _context, IServiceProvider _serviceProvider)
