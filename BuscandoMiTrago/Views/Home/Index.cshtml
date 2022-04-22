@@ -1,8 +1,202 @@
-﻿@{
+﻿@model DrinksViewModel
+
+@{
     ViewData["Title"] = "Home Page";
 }
-
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="card mb-2 ocultar">
+    <div class="card-header">
+        <div class="row">
+            <div class="col-8">
+                <h5 id="hUser"></h5>
+            </div>
+            <div class="col-4">
+                <button id="btnChange" onclick="Change()" class="btn btn-sm btn-outline-primary" title="It's not your name. Change it!">Other User</button>
+            </div>
+        </div>
+    </div>
+    <div class="card-body collapse">
+        <div class="row">
+            <div class="col-8">
+                <div id="dIsFav" class="collapse">
+                    <span class="text-warning fas fa-star mr-2"></span>Great! It's one of your favorite drinks!
+                </div>
+            </div>
+            <div class="col-4">
+                <button id="btnFav" onclick="Fav()" class="btn btn-sm btn-outline-success"><span class="fas fa-star mr-2"></span>It's my favorite!</button>
+                <button id="btnUnFav" onclick="UnFav()" class="btn btn-sm btn-outline-danger collapse"><span class="fas fa-thumbs-down mr-2"></span>Not Favorite</button>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer collapse">
+    </div>
 </div>
+
+<div class="text-center ocultar">
+    <h1 class="display-4">My Favorite Drinks</h1>
+    <p class="collapse">Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>
+<table id="tFavorites" class="table table-striped ocultar">
+    <thead class="thead-dark">
+        <tr>
+            <td>No</td>
+            <td>Drink</td>
+            <td></td>
+        </tr>
+    </thead>
+</table>
+
+@section Scripts 
+{
+    <script>
+        var tFavorites;
+        var currUser;
+        var currId;
+        var dIsFav;
+        var btnFav;
+        var btnUnFav;
+        var hUser;
+        window.onload = function()
+        {
+            
+            if(localStorage.user == undefined)
+            {
+                var user = prompt("Enter your name, please:", "Gerardo");
+                if (user != null) {
+                    currUser = user;
+                    localStorage.user = currUser;
+                }
+            }
+            else
+            {
+                currUser = localStorage.user;
+            }
+            tFavorites = document.getElementById("tFavorites");
+            dIsFav = document.getElementById("dIsFav");
+            btnFav = document.getElementById("btnFav");
+            btnUnFav = document.getElementById("btnUnFav");
+            hUser = document.getElementById("hUser");
+            init();
+        }
+        function init()
+        {
+            if(localStorage.users != undefined)
+            {
+                SetFavs();
+            }
+            else
+            {
+                var elems = document.getElementsByClassName('ocultar');
+                for(let i=0; i < elems.length; i++)
+                {
+                   elems[i].style.display = 'none';
+                }
+            }
+        }
+        function GetDrink(id)
+        {
+            let url = "https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=" + id;
+            try
+            {
+                return fetch(url)
+                .then(response => response.json());
+            }
+            catch(error)
+            {
+            console.log(url);
+            }
+        }
+        function SetFavs()
+        {
+            hUser.innerHTML = "Welcome " + currUser;
+            let users = JSON.parse(localStorage.users);
+            for(let u = 0; u < users.length; u++)
+            {
+                while(tFavorites.rows.length > 1)
+                {
+                  tFavorites.deleteRow(1);
+                }
+                if (users[u].name.toLowerCase() == currUser.toLowerCase())
+                {
+                    for(let i = 0; i < users[u].id.length; i++)
+                    {
+                        GetDrink(users[u].id[i])
+                        .then(j => {
+                            let d1 = j.drinks[0];
+                            let row = tFavorites.insertRow();
+                            let cell = row.insertCell();
+                            cell.textContent = i + 1;
+                            cell = row.insertCell();
+                            cell.textContent = d1.strDrink;
+
+                            let btn = document.createElement("BUTTON");
+                            btn.appendChild(document.createTextNode("Unfav!"));                               
+                            btn.setAttribute("id","id"+d1.idDrink);
+                            btn.setAttribute("class","btn");
+                            btn.setAttribute("class","btn-danger");
+                            btn.setAttribute("onclick","UnFav(" + d1.idDrink + ")");
+                            cell = row.insertCell();
+                            cell.appendChild(btn);
+
+                            let l = document.createElement("a");
+                            l.appendChild(document.createTextNode("Details"));
+                            l.setAttribute("class","btn");
+                            l.setAttribute("class","btn-info");
+                            l.setAttribute("href", "/Drinks/Details?idDrink="+ d1.idDrink);
+                            l.setAttribute("target", "_blank");
+                            cell = row.insertCell();
+                            cell.appendChild(l);
+                        });
+                    }
+                    break;
+                }
+            }
+        }
+        function SearchUser(name)
+        {
+            let existsUser = false;
+            if(localStorage.users == undefined)
+            {
+                return false;
+            }
+            let users = JSON.parse(localStorage.users);
+            for(let u = 0; u < users.length;u++)
+            {
+                if (users[u].name.toLowerCase() == name.toLowerCase())
+                {
+                    existsUser = true;
+                    break;
+                }
+            }
+            return existsUser;
+        }
+        function Change()
+        {
+            var user = prompt("Enter your name, please:", "Gerardo");
+            if (user != null && user.toLowerCase() != currUser.toLowerCase()) {
+                currUser = user;
+                localStorage.removeItem("user");
+                localStorage.user = currUser;
+            }
+            init();
+        }
+        function UnFav(id)
+        {
+             let users = JSON.parse(localStorage.users);
+             let exists = SearchUser(currUser);
+             if(exists)
+             {
+                for(let u = 0; u < users.length; u++)
+                {
+                    if(users[u].name.toLowerCase() == currUser.toLowerCase())
+                    {
+                        users[u].id.splice (users[u].id.indexOf(id), 1);
+                        break;
+                    }
+                }
+                localStorage.removeItem("users");
+                localStorage.users = JSON.stringify(users);
+            }
+            SetFavs();
+        }
+    </script>
+}

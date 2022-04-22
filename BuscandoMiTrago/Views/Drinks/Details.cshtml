@@ -125,7 +125,7 @@
         </dd>
     </dl>
 </div>
-<div>
+<div class="@(Model.M==null?"collapse":"")">
     <a asp-action="Index" 
                 asp-route-M="@Model.M"
                 asp-route-C="@Model.C"
@@ -189,7 +189,7 @@
         }
         function SetFavs()
         {
-            hUser.innerText = currUser;
+            hUser.innerText = "Welcome " + currUser;
             dIsFav.classList.add("collapse");
             btnUnFav.classList.add("collapse");
             btnFav.classList.remove("collapse");
@@ -268,7 +268,7 @@
             }
             SetFavs();
        }
-        function UnFav(id)
+        function UnFav()
         {
              let users = JSON.parse(localStorage.users);
              let exists = SearchUser(currUser);

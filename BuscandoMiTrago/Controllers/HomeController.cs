@@ -8,25 +8,33 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Entidades.DataContext;
 
 namespace BuscandoMiTrago.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly IRepositorioGenerico<Category> _repositorioGenerico;
-        private readonly IUnidadDeTrabajo _unidadDeTrabajo;
-        public HomeController(ILogger<HomeController> logger, IRepositorioGenerico<Category> repositorioGenerico, IUnidadDeTrabajo unidadDeTrabajo)
+        private readonly BuscandoMiTragoDbContext _context;
+        private readonly IServiceProvider _serviceProvider;
+        public HomeController(ILogger<HomeController> logger, BuscandoMiTragoDbContext context, IServiceProvider serviceProvider)
         {
             _logger = logger;
-            _repositorioGenerico = repositorioGenerico;
-            _unidadDeTrabajo = unidadDeTrabajo;
+            _context = context;
+            _serviceProvider = serviceProvider;
         }
 
-        public IActionResult Index()
+        public IActionResult Index(DrinksViewModel model)
         {
-            
-            return View();
+            if (model.UF == null)
+            {
+                model.UF = new UsersFavorites
+                {
+                    Name = "",
+                    Favorites = new List<int>()
+                };
+            }
+            return View(model);
         }
 
         public IActionResult Privacy()
